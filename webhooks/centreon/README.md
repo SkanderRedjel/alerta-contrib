@@ -28,7 +28,7 @@ $ alerta/bin/pip install /opt/webhooks/ #Install Centreon webhook through the sa
 To integrate Centreon alerts with Alerta, you need to configure Centreon to send alerts to the Alerta service using a custom webhook, for this you will need to create two notification commands, one for the hosts, and another for the services. 
 This webhook acts as a bridge. Follow the steps below to set up this integration:
 
---> Host Notification Command:
+### Host Notification Command:
 1. Create an API Key in Alerta.
 2. In your Centreon web interface, navigate to Configuration > Commands.
 3. Click on the Add button to create a new command.
@@ -37,7 +37,7 @@ This webhook acts as a bridge. Follow the steps below to set up this integration
 6. In the Command Line field, enter the following command content:
 ``` curl -X POST -H "Content-type: application/json" -H "Authorization: Key YourAPIKey" -d '{ "environment": "Production or Staging", "event": "$HOSTNAME$ is down", "group": "Centreon", "origin": "Centreon", "resource": "$HOSTNAME$", "service": "Centreon", "severity": "$HOSTSTATE$", "value": "DOWN", "text": "The host is DOWN" }' "https://YourAlertaIOFQDN/api/webhooks/centreon" ``` 
 
---> Service Notification Command:
+### Service Notification Command:
 1. Create an API Key in Alerta.
 2. In your Centreon web interface, navigate to Configuration > Commands.
 3. Click on the Add button to create a new command.
@@ -45,7 +45,10 @@ This webhook acts as a bridge. Follow the steps below to set up this integration
 5. Select type "Notification".
 6. In the Command Line field, enter the following command content:
 ``` curl -X POST -H "Content-type: application/json" -H "Authorization: Key YourAPIKey" -d '{ "environment": "Production or Staging", "event": "$SERVICEDESC$ on $HOSTNAME$", "group": "Centreon", "origin": "Centreon", "resource": "$HOSTNAME$", "service": "Centreon", "severity": "$SERVICESTATE$", "text": "$SERVICEOUTPUT$", "value": "$SERVICEOUTPUT$" }' "https://YourAlertaIOFQDN/api/webhooks/centreon" ``` 
-And now, you will just have to add this notification command to your Host/Service templates.
+
+You can customize your command to include only the parameters that you want to have in Alerta.
+
+Now, you will just have to add this notification command to your Host/Service templates.
 
 NB1: Before adding this command to Centreon, i'd recommand to manually send this POST request and see if it works perfectly fine.
 
